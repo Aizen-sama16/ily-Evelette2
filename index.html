@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>For My Begum ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+
+<style>
+/* ================= GLOBAL ================= */
+
+body{
+  margin:0;
+  font-family:'Playfair Display', serif;
+  background:#f8cfd6;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#ff3f9e;
+}
+
+/* ================= FLOATING HEARTS ================= */
+
+#hearts{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+}
+
+.heart{
+  position:absolute;
+  color:#ff5ca8;
+  animation:float 6s linear infinite;
+}
+
+@keyframes float{
+  from{transform:translateY(110vh);opacity:1;}
+  to{transform:translateY(-10vh);opacity:0;}
+}
+
+/* ================= BOOK ================= */
+
+.book{
+  width:92%;
+  max-width:430px;
+  height:88vh;
+  background:linear-gradient(145deg,#ffd6e6,#ffc0d8);
+  border-radius:25px;
+  box-shadow:0 25px 60px rgba(0,0,0,.25);
+  overflow:hidden;
+  position:relative;
+  padding:25px;
+  perspective:1200px;
+}
+
+/* ================= PAGE ================= */
+
+.page{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  text-align:center;
+  background:rgba(255,255,255,.6);
+  border-radius:20px;
+  transition:.6s;
+  transform-origin:left;
+}
+
+.hidden{
+  opacity:0;
+  pointer-events:none;
+  transform:rotateY(90deg);
+}
+
+/* ================= BUTTONS ================= */
+
+button{
+  background:#ff4fa3;
+  border:none;
+  color:white;
+  border-radius:25px;
+  padding:10px 25px;
+  cursor:pointer;
+  margin:6px;
+}
+
+.backBtn{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:white;
+  color:#ff4fa3;
+  font-size:12px;
+}
+
+/* ================= MENU ================= */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,80px);
+  gap:25px;
+}
+
+.gameHeart{
+  font-size:45px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.gameHeart:hover{
+  transform:scale(1.3);
+}
+
+/* ================= MEMORY ================= */
+
+.card{
+  background:white;
+  padding:12px;
+  border-radius:10px;
+  font-size:24px;
+  cursor:pointer;
+}
+
+/* ================= FIREWORKS ================= */
+
+.spark{
+  position:absolute;
+  width:6px;
+  height:6px;
+  background:#ff4fa3;
+  border-radius:50%;
+  animation:explode 1s ease-out forwards;
+}
+
+@keyframes explode{
+  to{
+    transform:translate(var(--x),var(--y));
+    opacity:0;
+  }
+}
+
+/* LOVE METER BREAK */
+@keyframes break{
+  0%{transform:scale(1)}
+  40%{transform:scale(1.4) rotate(10deg)}
+  100%{transform:scale(0);opacity:0}
+}
+.break{animation:break .6s forwards;}
+</style>
+</head>
+
+<body>
+
+<div id="hearts"></div>
+
+<div class="book">
+
+<!-- PAGE 1 -->
+<div id="p1" class="page">
+  <h2>Will you be my Valentine ❤️</h2>
+  <div>
+    <button onclick="next('p2')">Yes 😍</button>
+    <button id="noBtn" onmouseover="runAway()">No ☹️</button>
+  </div>
+</div>
+
+<!-- LONG LOVE LETTER -->
+<div id="p2" class="page hidden">
+  <button class="backBtn" onclick="back()">← Back</button>
+  <p id="typing" style="max-width:90%; line-height:1.6;"></p>
+  <button onclick="next('menu')">Next ❤️</button>
+</div>
+
+<!-- GAME MENU -->
+<div id="menu" class="page hidden">
+  <button class="backBtn" onclick="back()">← Back</button>
+
+  <h3>Pick a Heart 💕</h3>
+
+  <div class="grid">
+    <div class="gameHeart" onclick="next('love')">❤️</div>
+    <div class="gameHeart" onclick="next('memory')">💘</div>
+    <div class="gameHeart" onclick="next('letterGame')">💌</div>
+    <div class="gameHeart" onclick="next('fire')">✨</div>
+    <div class="gameHeart" onclick="next('prank')">😈</div>
+    <div class="gameHeart" onclick="next('cats')">🐱</div>
+  </div>
+</div>
+
+<!-- LOVE METER -->
+<div id="love" class="page hidden">
+  <button class="backBtn" onclick="back()">← Back</button>
+  <h3>How much do you love me 😌</h3>
+  <input type="range" min="0" max="120" value="50" oninput="loveMeter(this)">
+  <h2 id="loveVal">50%</h2>
+</div>
+
+<!-- MEMORY -->
+<div id="memory" class="page hidden">
+  <button class="backBtn" onclick="back()">← Back</button>
+  <h3>Match Hearts 🧠</h3>
+  <div style="display:grid;grid-template-columns:repeat(4,60px);gap:10px;">
+    <div class="card" onclick="flip(this)">❤️</div>
+    <div class="card" onclick="flip(this)">💖</div>
+    <div class="card" onclick="flip(this)">❤️</div>
+    <div class="card" onclick="flip(this)">💘</div>
+    <div class="card" onclick="flip(this)">💖</div>
+    <div class="card" onclick="flip(this)">💘</div>
+  </div>
+</div>
+
+<!-- FIRST DAY LETTER GAME -->
+<div id="letterGame" class="page hidden">
+  <button class="backBtn" onclick="back()">← Back</button>
+
+  <h3>💌 A Memory For You</h3>
+  <p>
+  I still remember the first day we met  
+  it was Valentine's Day  
+  the air felt softer  
+  the world felt slower  
+  and somehow everything pointed toward you  
+  that day wasn't just a date  
+  it became the beginning of my forever  
+  and every heartbeat since then has carried your name ❤️
+  </p>
+</div>
+
+<!-- FIREWORKS -->
+<div id="fire" class="page hidden">
+  <button class="backBtn" onclick="back()">← Back</button>
+  <button onclick="fireworks()">Celebrate 🎆</button>
+</div>
+
+<!-- PRANK -->
+<div id="prank" class="page hidden">
+  <button class="backBtn" onclick="back()">← Back</button>
+  <button onclick="next('prank2')">Don't Press 😈</button>
+</div>
+
+<div id="prank2" class="page hidden">
+  <button class="backBtn" onclick="back()">← Back</button>
+  <h2>Got you 🤣</h2>
+</div>
+
+<!-- CAT MEMES PAGE (images you send later) -->
+<div id="cats" class="page hidden">
+  <button class="backBtn" onclick="back()">← Back</button>
+  <h3>Cat Memes For You 🐱❤️</h3>
+  <p>Send me your cat images and I'll add them here 😄</p>
+</div>
+
+</div>
+
+<script>
+/* PAGE STACK */
+let stack=["p1"];
+
+function next(id){
+  document.getElementById(stack.at(-1)).classList.add("hidden");
+  document.getElementById(id).classList.remove("hidden");
+  stack.push(id);
+}
+
+function back(){
+  if(stack.length>1){
+    document.getElementById(stack.pop()).classList.add("hidden");
+    document.getElementById(stack.at(-1)).classList.remove("hidden");
+  }
+}
+
+/* RUNAWAY NO */
+function runAway(){
+  noBtn.style.position="absolute";
+  noBtn.style.left=Math.random()*250+"px";
+  noBtn.style.top=Math.random()*300+"px";
+}
+
+/* FLOATING HEARTS */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="❤";
+  h.style.left=Math.random()*100+"vw";
+  h.style.fontSize=Math.random()*20+12+"px";
+  hearts.appendChild(h);
+  setTimeout(()=>h.remove(),6000);
+},300);
+
+/* LONG LETTER TYPING */
+const text=`My Begum,
+
+From the moment you entered my life everything slowly changed in the most beautiful way.
+Days felt lighter, smiles came easier, and even the quiet moments started feeling warm.
+Loving you never felt forced — it feels natural, peaceful and meant to be.
+
+You are my calm in chaos, my happiness in ordinary days, my favourite notification,
+my safe place, my home.
+
+I don't just want today with you.
+I want every tomorrow.
+Every silly laugh.
+Every late night talk.
+Every small fight and make up hug.
+Every memory we haven’t made yet.
+
+If life is a book,
+then you are my favourite chapter
+and I want this story to never end ❤️`;
+
+let i=0;
+function type(){
+ if(i<text.length){
+   typing.innerHTML+=text[i++];
+   setTimeout(type,20);
+ }
+}
+type();
+
+/* LOVE METER BREAK */
+function loveMeter(s){
+ loveVal.innerText=s.value+"%";
+ if(s.value>100){
+   loveVal.innerText="Too much 😳💥";
+   loveVal.classList.add("break");
+ }
+}
+
+/* MEMORY */
+let first=null;
+function flip(c){
+ if(!first){first=c;c.style.background="#ffd1dc";}
+ else{
+  if(first.innerText===c.innerText){
+   first.style.visibility="hidden";
+   c.style.visibility="hidden";
+  }else first.style.background="white";
+  first=null;
+ }
+}
+
+/* REAL FIREWORKS */
+function fireworks(){
+ for(let i=0;i<30;i++){
+   const s=document.createElement("div");
+   s.className="spark";
+   s.style.left="50%";
+   s.style.top="50%";
+   s.style.setProperty("--x",(Math.random()*300-150)+"px");
+   s.style.setProperty("--y",(Math.random()*300-150)+"px");
+   document.body.appendChild(s);
+   setTimeout(()=>s.remove(),1000);
+ }
+}
+</script>
+
+</body>
+</html>
